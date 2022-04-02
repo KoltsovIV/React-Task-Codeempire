@@ -27,7 +27,7 @@ class App extends Component<any, any>{
             (result) => {
                 this.setState({
                     isLoaded: true,
-                    categories: result
+                    categories: [...result, 'random']
                 });
             },
             (error) => {
@@ -42,7 +42,7 @@ class App extends Component<any, any>{
   render() {
     const { error, isLoaded, categories, activeCategory } = this.state;
       if (error) {
-          return <div>Ошибка: {error.message}</div>;
+          return <div>Error: {error.message}</div>;
       } else if (!isLoaded) {
           return <div>Loading...</div>;
       } else {
@@ -53,7 +53,9 @@ class App extends Component<any, any>{
                       categories={categories}
                       isActive={activeCategory}
                       onCategory={this.onCategory}/>
-                  <MessageField/>
+                  <MessageField
+                      // isActive={activeCategory}
+                  />
               </div>
           );
       }
