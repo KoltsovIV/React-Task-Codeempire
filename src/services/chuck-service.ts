@@ -10,7 +10,7 @@ class ChuckService {
         return await res.json();
     }
 
-    getAllCategories = () => {
+    getCategories = () => {
         return this.getResource('https://api.chucknorris.io/jokes/categories');
     }
 

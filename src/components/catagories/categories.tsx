@@ -2,16 +2,7 @@ import './categories.scss'
 
 const Categories = (props: any) =>{
 
-    const buttonsData =[
-        'animal',
-        'career',
-        'celebrity',
-        'dev',
-        'explicit',
-        'fashion'
-    ];
-
-    const buttons = buttonsData.map((name) => {
+    const buttons = props.categories.map((name: string) => {
         const active = props.isActive === name;
         const clazz = active ? 'active' : '';
         return (
