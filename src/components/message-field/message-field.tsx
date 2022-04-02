@@ -1,5 +1,6 @@
 import './message-field.scss';
-import bigChuck from '../../shared/imgs/big-chuck.png'
+import bigChuck from '../../shared/imgs/big-chuck.png';
+
 const MessageField = () => {
     return (
         <div className="message-field">

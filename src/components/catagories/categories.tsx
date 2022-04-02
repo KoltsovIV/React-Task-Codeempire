@@ -1,24 +1,35 @@
 import './categories.scss'
 
-const Categories = () => {
+const Categories = (props: any) =>{
+
+    const buttonsData =[
+        'animal',
+        'career',
+        'celebrity',
+        'dev',
+        'explicit',
+        'fashion'
+    ];
+
+    const buttons = buttonsData.map((name) => {
+        const active = props.isActive === name;
+        const clazz = active ? 'active' : '';
+        return (
+            <button
+                className={`categories__buttons ${clazz}`}
+                type='button'
+                key={name}
+                onClick={() => props.onCategory(name)}>
+                {name}
+            </button>
+        )
+    });
+
     return (
         <div className="categories">
             <h1 className="categories__title">Categories</h1>
             <div className="categories__buttons-container">
-                <button className="categories__buttons active">animal</button>
-                <button className="categories__buttons">career</button>
-                <button className="categories__buttons">celebrity</button>
-                <button className="categories__buttons">dev</button>
-                <button className="categories__buttons">explicit</button>
-                <button className="categories__buttons">fashion</button>
-                <button className="categories__buttons"></button>
-                <button className="categories__buttons"></button>
-                <button className="categories__buttons"></button>
-                <button className="categories__buttons"></button>
-                <button className="categories__buttons"></button>
-                <button className="categories__buttons"></button>
-                <button className="categories__buttons"></button>
-
+                {buttons}
             </div>
         </div>
     )

@@ -4,6 +4,12 @@ import './index.scss';
 import App from './components/app/App';
 import reportWebVitals from './reportWebVitals';
 
+// const chuckService = new ChuckService();
+//
+// chuckService.getAllCategories().then(res => console.log(res))
+// chuckService.getJoke('').then(res => console.log(res.value))
+
+
 ReactDOM.render(
   <React.StrictMode>
       <App/>
