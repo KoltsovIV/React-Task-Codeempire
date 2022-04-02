@@ -1,0 +1,25 @@
+@import "src/shared/constants/colors";
+
+.message-field {
+  width: 100%;
+  text-align: right;
+
+  &__img {
+    position: relative;
+    z-index: -1;
+    margin-right: 25px;
+    margin-bottom: -110px;
+  }
+
+  &__text {
+    min-height: 160px;
+    background-color: $mainColor;
+    border-radius: 25px;
+    padding: 24px;
+    text-align: left;
+    color: $altTextColor;
+    font-weight: 600;
+    font-size: 20px;
+    z-index: 10;
+  }
+}
