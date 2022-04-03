@@ -10,15 +10,14 @@ class ChuckService {
         return await res.json();
     }
 
-    getAllCategories = () => {
+    getCategories = () => {
         return this.getResource('https://api.chucknorris.io/jokes/categories');
     }
 
-//     getJoke = (category:string) => {
-//         return this.getResource(`https://api.chucknorris.io/jokes/random${
-//         category ? ('?category={' + category + '}') : ''}`
-// );
-//     }
+    getJoke = (category:string) => {
+        return this.getResource(`https://api.chucknorris.io/jokes/random${category ? ('?' + category) : ''}`
+);
+    }
 }
 
 export default ChuckService;
