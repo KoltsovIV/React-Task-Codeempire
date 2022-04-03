@@ -1,11 +1,11 @@
 import './header.scss'
 
-const Header = () => {
+const Header = (props:any) => {
     return (
         <>
             <header className="header">
                 <div className="wrapper">
-                    <img src="https://assets.chucknorris.host/img/avatar/chuck-norris.png" alt="logo"/>
+                    <img src={props.logo} alt="logo"/>
                     <p>Chuck Norris</p>
                 </div>
 

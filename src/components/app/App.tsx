@@ -6,24 +6,43 @@ import MessageField from "../message-field/message-field";
 import ChuckService from "../../services/chuck-service";
 
 class App extends Component<any, any>{
+
+    chuckService = new ChuckService();
+
     constructor(props: any) {
         super(props);
         this.state = {
             error: null,
             isLoaded: false,
             categories: [],
-            activeCategory: ''
+            activeCategory: '',
+            activePhrase: '',
+            logoLink: ''
         }
     }
 
+
     onCategory = (activeCategory: string) => {
         this.setState({activeCategory});
+
+        this.chuckService.getJoke(activeCategory).then(
+            (result) => {
+                this.setState({
+                    isLoaded: true,
+                    activePhrase: result.value
+                });
+            },
+            (error) => {
+                this.setState({
+                    isLoaded: true,
+                    error
+                });
+            }
+        )
     }
 
     componentDidMount() {
-        const chuckService = new ChuckService();
-
-        chuckService.getCategories().then(
+        this.chuckService.getCategories().then(
             (result) => {
                 this.setState({
                     isLoaded: true,
@@ -37,6 +56,23 @@ class App extends Component<any, any>{
                 });
             }
         )
+
+        this.chuckService.getJoke(this.state.activeCategory).then(
+            (result) => {
+                this.setState({
+                    isLoaded: true,
+                    logoLink: result.icon_url,
+                    activePhrase: result.value
+                });
+            },
+            (error) => {
+                this.setState({
+                    isLoaded: true,
+                    error
+                });
+            }
+        )
+
     }
 
   render() {
@@ -48,14 +84,13 @@ class App extends Component<any, any>{
       } else {
           return (
               <div className="App">
-                  <Header/>
+                  <Header logo={this.state.logoLink}/>
                   <Categories
                       categories={categories}
                       isActive={activeCategory}
                       onCategory={this.onCategory}/>
                   <MessageField
-                      // isActive={activeCategory}
-                  />
+                      activePhrase={this.state.activePhrase}/>
               </div>
           );
       }
