@@ -13,87 +13,51 @@ class App extends Component<any, any>{
         super(props);
         this.state = {
             error: null,
-            isLoaded: false,
-            categories: [],
+            isLoading: false,
+            logoUrl: '',
             activeCategory: '',
-            activePhrase: '',
-            logoLink: ''
+            activePhrase: ''
         }
+    }
+
+    componentDidMount() {
+        this.getChuckJoke(this.state.activeCategory);
     }
 
 
     onCategory = (activeCategory: string) => {
         this.setState({activeCategory});
-
-        this.chuckService.getJoke(activeCategory).then(
-            (result) => {
-                this.setState({
-                    isLoaded: true,
-                    activePhrase: result.value
-                });
-            },
-            (error) => {
-                this.setState({
-                    isLoaded: true,
-                    error
-                });
-            }
-        )
+        this.getChuckJoke(activeCategory);
     }
 
-    componentDidMount() {
-        this.chuckService.getCategories().then(
+    getChuckJoke = (category: string) => {
+        this.chuckService.getJoke(category).then(
             (result) => {
                 this.setState({
-                    isLoaded: true,
-                    categories: [...result, 'random']
-                });
-            },
-            (error) => {
-                this.setState({
-                    isLoaded: true,
-                    error
-                });
-            }
-        )
-
-        this.chuckService.getJoke(this.state.activeCategory).then(
-            (result) => {
-                this.setState({
-                    isLoaded: true,
-                    logoLink: result.icon_url,
                     activePhrase: result.value
                 });
-            },
-            (error) => {
-                this.setState({
-                    isLoaded: true,
-                    error
-                });
+
+                if (!this.state.logoUrl) {
+                    this.setState({
+                        logoUrl: result.icon_url
+                    });
+                }
             }
         )
-
     }
 
   render() {
-    const { error, isLoaded, categories, activeCategory } = this.state;
-      if (error) {
-          return <div>Error: {error.message}</div>;
-      } else if (!isLoaded) {
-          return <div>Loading...</div>;
-      } else {
-          return (
-              <div className="App">
-                  <Header logo={this.state.logoLink}/>
-                  <Categories
-                      categories={categories}
-                      isActive={activeCategory}
-                      onCategory={this.onCategory}/>
-                  <MessageField
-                      activePhrase={this.state.activePhrase}/>
-              </div>
-          );
-      }
+    const { error, isLoading, logoUrl, activeCategory, activePhrase } = this.state;
+      return (
+          <div className="App">
+              <Header logo={logoUrl}/>
+              <Categories
+                  activeCategory={activeCategory}
+                  onCategory={this.onCategory}/>
+              <MessageField
+                  activePhrase={activePhrase}/>
+          </div>
+      );
   }
 }
 

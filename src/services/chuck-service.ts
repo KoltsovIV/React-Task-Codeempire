@@ -1,22 +1,24 @@
-
-
 class ChuckService {
+
+    api = {
+        base: 'https://api.chucknorris.io/jokes/',
+        categories: 'categories',
+        random: 'random'
+    }
+
     getResource = async (url: string) => {
         let res = await fetch(url);
-        if (!res.ok) {
-            throw new Error(`Could not fetch ${url}, status: ${res.status}`);
-        }
 
         return await res.json();
     }
 
     getCategories = () => {
-        return this.getResource('https://api.chucknorris.io/jokes/categories');
+        return this.getResource(this.api.base + this.api.categories);
     }
 
     getJoke = (category:string) => {
-        return this.getResource(`https://api.chucknorris.io/jokes/random${category ? ('?' + category) : ''}`
-);
+        return this.getResource(this.api.base + this.api.random
+            + ((category && category !== this.api.random) ? ('?' + category) : ''));
     }
 }
 
