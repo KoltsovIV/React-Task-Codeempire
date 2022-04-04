@@ -14,9 +14,8 @@ class ChuckService {
     }
 
     getJoke = async (category:string) => {
-        const res= await this.getResource(this.api.url + this.api.random
+        return await this.getResource(this.api.url + this.api.random
             + ((category && category !== this.api.random) ? ('?' + category) : ''));
-        return res;
     }
 }
 

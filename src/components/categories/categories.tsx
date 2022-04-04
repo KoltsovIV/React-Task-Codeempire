@@ -1,8 +1,8 @@
+import {Component} from 'react';
 import './categories.scss'
-import {Component} from "react";
-import ChuckService from "../../services/chuck-service";
-import Spinner from "../spinner/spinner";
-import ErrorMessage from "../errorMessage/error-message";
+import ChuckService from '../../services/chuck-service';
+import {LoadingService} from '../../services/loading-service';
+import {CategoriesProps} from '../../shared/interfases/props-interfaces';
 
 const initialState = {
     error: false,
@@ -10,7 +10,7 @@ const initialState = {
     categories: Array<string>()
 }
 
-class Categories extends Component<any, typeof initialState>{
+class Categories extends Component<CategoriesProps, typeof initialState>{
 
     state = initialState;
 
@@ -57,16 +57,13 @@ class Categories extends Component<any, typeof initialState>{
 
     render() {
         const {error, isLoading, categories} =this.state;
-        const errorMessage = error ? <ErrorMessage/> : null;
-        const spinner = isLoading ? <Spinner/> : null;
-        const content = !(isLoading || errorMessage) ? this.makeButtons(categories) : null;
+        const buttons = this.makeButtons(categories);
 
+        const content = LoadingService.manageContent(isLoading, error, buttons);
         return (
             <div className="categories">
                 <h1 className="categories__title">Categories</h1>
                 <div className="categories__buttons-container">
-                    {errorMessage}
-                    {spinner}
                     {content}
                 </div>
             </div>
