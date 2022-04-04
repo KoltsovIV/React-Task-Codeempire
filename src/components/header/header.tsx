@@ -1,6 +1,7 @@
 import './header.scss'
+import {HeaderProps} from '../../shared/interfases/props-interfaces';
 
-const Header = (props:any) => {
+const Header = (props:HeaderProps) => {
     return (
         <>
             <header className="header">

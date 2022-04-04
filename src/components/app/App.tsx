@@ -1,9 +1,11 @@
 import {Component} from 'react';
 import './App.scss';
+import {ChuckJokeInterface} from '../../shared/interfases/api-interfaces';
+import ChuckService from '../../services/chuck-service';
+
 import Header from '../header/header';
 import Categories from '../categories/categories';
 import MessageField from '../message-field/message-field';
-import ChuckService from '../../services/chuck-service';
 
 const initialState = {
     error: false,
@@ -14,11 +16,11 @@ const initialState = {
     activePhrase: ''
 }
 
-class App extends Component<unknown, typeof initialState>{
+class App extends Component<object, typeof initialState>{
 
     state = initialState;
 
-    onJokeLoaded = (result: any) => {
+    onJokeLoaded = (result: ChuckJokeInterface) => {
         this.setState(() => ({
             activePhrase: result.value,
             apiLoading: false,
