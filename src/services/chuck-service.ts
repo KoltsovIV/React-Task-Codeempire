@@ -1,10 +1,7 @@
-class ChuckService {
+import {ChuckApiUrls} from "../shared/constants/chuck-api-urls";
 
-    api = {
-        base: 'https://api.chucknorris.io/jokes/',
-        categories: 'categories',
-        random: 'random'
-    }
+class ChuckService {
+    api = new ChuckApiUrls;
 
     getResource = async (url: string) => {
         let res = await fetch(url);
@@ -13,13 +10,14 @@ class ChuckService {
     }
 
     getCategories = () => {
-        return this.getResource(this.api.base + this.api.categories);
+        return this.getResource(this.api.url + this.api.categories);
     }
 
-    getJoke = (category:string) => {
-        return this.getResource(this.api.base + this.api.random
+    getJoke = async (category:string) => {
+        const res= await this.getResource(this.api.url + this.api.random
             + ((category && category !== this.api.random) ? ('?' + category) : ''));
+        return res;
     }
 }
 
-export default ChuckService;
+export default new ChuckService;

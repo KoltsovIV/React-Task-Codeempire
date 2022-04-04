@@ -1,63 +1,82 @@
 import {Component} from 'react';
 import './App.scss';
-import Header from "../header/header";
-import Categories from "../catagories/categories";
-import MessageField from "../message-field/message-field";
-import ChuckService from "../../services/chuck-service";
+import Header from '../header/header';
+import Categories from '../categories/categories';
+import MessageField from '../message-field/message-field';
+import ChuckService from '../../services/chuck-service';
 
-class App extends Component<any, any>{
+const initialState = {
+    error: false,
+    apiLoading: true,
+    appLoading: true,
+    logoUrl: '',
+    activeCategory: '',
+    activePhrase: ''
+}
 
-    chuckService = new ChuckService();
+class App extends Component<unknown, typeof initialState>{
 
-    constructor(props: any) {
-        super(props);
-        this.state = {
-            error: null,
-            isLoading: false,
-            logoUrl: '',
-            activeCategory: '',
-            activePhrase: ''
+    state = initialState;
+
+    onJokeLoaded = (result: any) => {
+        this.setState(() => ({
+            activePhrase: result.value,
+            apiLoading: false,
+            error: false
+        }));
+
+        if (!this.state.logoUrl) {
+            this.setState(() => ({
+                logoUrl: result.icon_url
+            }));
         }
     }
 
-    componentDidMount() {
-        this.getChuckJoke(this.state.activeCategory);
+    onError = () => {
+        this.setState(() => ({
+            apiLoading: false,
+            error: true
+        }));
     }
 
-
-    onCategory = (activeCategory: string) => {
-        this.setState({activeCategory});
-        this.getChuckJoke(activeCategory);
+    getChuckJoke = async (category: string) => {
+        this.setState(() => ({
+            apiLoading: true
+        }))
+        await ChuckService.getJoke(category)
+            .then(this.onJokeLoaded)
+            .catch(this.onError);
     }
 
-    getChuckJoke = (category: string) => {
-        this.chuckService.getJoke(category).then(
-            (result) => {
-                this.setState({
-                    activePhrase: result.value
-                });
+    handleCategoryChange = async (activeCategory: string) => {
+        this.setState(() => ({activeCategory}));
+        await this.getChuckJoke(activeCategory);
+    }
 
-                if (!this.state.logoUrl) {
-                    this.setState({
-                        logoUrl: result.icon_url
-                    });
-                }
-            }
-        )
+    async componentDidMount() {
+        const el = document.querySelector(".loader-container");
+        if (el) {
+            el.remove();
+            this.setState(() => ({ appLoading: false }));
+        }
+
+        await this.getChuckJoke(this.state.activeCategory)
     }
 
   render() {
-    const { error, isLoading, logoUrl, activeCategory, activePhrase } = this.state;
-      return (
+        const { error, apiLoading, logoUrl, activeCategory, activePhrase } = this.state;
+        return (
           <div className="App">
               <Header logo={logoUrl}/>
               <Categories
                   activeCategory={activeCategory}
-                  onCategory={this.onCategory}/>
+                  handleCategoryChange={this.handleCategoryChange}/>
               <MessageField
-                  activePhrase={activePhrase}/>
+                  activePhrase={activePhrase}
+                  isLoading={apiLoading}
+                  error={error}/>
           </div>
-      );
+        );
   }
 }
 
